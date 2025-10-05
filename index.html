@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>
+      Mark “EnderMage99” — Game Design & Gameplay Programming Portfolio
+    </title>
+    <meta
+      name="description"
+      content="Game design portfolio focused on AI behaviors, combat readability, crafting UI, and systems design for the Lobotomy Corporation 13 community project."
+    />
+    <style>
+      :root {
+        --bg: #0b0d10;
+        --card: #12161b;
+        --ink: #e9eef4;
+        --muted: #a9b7c6;
+        --accent: #7bd389;
+        --accent-2: #8ac7ff;
+        --shadow: rgba(0, 0, 0, 0.35);
+        --code: #0f1419;
+        --code-ink: #e6edf3;
+        --chip: #1c222b;
+        --link: #9bd0ff;
+        --good: #99e2a1;
+        --maxw: 1100px;
+        --radius: 14px;
+        --pad: 18px;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        margin: 0;
+        font: 16px/1.55 system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial,
+          sans-serif;
+        color: var(--ink);
+        background: radial-gradient(
+          1200px 800px at 80% -10%,
+          #1a2330 0%,
+          #0b0d10 60%
+        );
+        background-attachment: fixed;
+      }
+      a {
+        color: var(--link);
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+      header {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        backdrop-filter: blur(8px);
+        background: linear-gradient(
+          180deg,
+          rgba(11, 13, 16, 0.85),
+          rgba(11, 13, 16, 0.55)
+        );
+        border-bottom: 1px solid #1c242f;
+      }
+      nav {
+        max-width: var(--maxw);
+        margin: 0 auto;
+        padding: 10px var(--pad);
+        display: flex;
+        gap: 16px;
+        align-items: center;
+        justify-content: space-between;
+      }
+      nav .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .brand .dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--accent);
+        box-shadow: 0 0 18px var(--accent);
+      }
+      .pill {
+        display: inline-flex;
+        gap: 8px;
+        align-items: center;
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: var(--chip);
+        color: var(--muted);
+        font-size: 12px;
+        border: 1px solid #1f2833;
+      }
+      .container {
+        max-width: var(--maxw);
+        margin: 0 auto;
+        padding: 40px var(--pad);
+      }
+      .hero {
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 28px;
+        align-items: center;
+        padding: 28px;
+        background: linear-gradient(180deg, #10161e, #0d131a);
+        border: 1px solid #1f2732;
+        border-radius: var(--radius);
+        box-shadow: 0 10px 40px var(--shadow);
+      }
+      .hero h1 {
+        font-size: 34px;
+        margin: 0 0 10px;
+      }
+      .hero p {
+        color: var(--muted);
+        margin: 0 0 12px;
+      }
+      .hero .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 8px;
+      }
+      .hero .cta {
+        display: flex;
+        gap: 12px;
+        margin-top: 14px;
+      }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 14px;
+        border-radius: 10px;
+        background: var(--accent);
+        color: #06240f;
+        font-weight: 600;
+        border: 1px solid #5fcf78;
+      }
+      .btn.alt {
+        background: transparent;
+        color: var(--ink);
+        border-color: #2a3543;
+      }
+      section {
+        margin-top: 36px;
+      }
+      h2 {
+        font-size: 22px;
+        margin: 0 0 12px;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+      }
+      .card {
+        background: var(--card);
+        border: 1px solid #1f2732;
+        border-radius: var(--radius);
+        padding: 18px;
+        box-shadow: 0 6px 28px var(--shadow);
+      }
+      .card h3 {
+        margin: 0 0 6px;
+        font-size: 18px;
+      }
+      .tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 10px;
+      }
+      .tag {
+        background: var(--chip);
+        color: var(--muted);
+        border: 1px solid #233041;
+        padding: 4px 8px;
+        border-radius: 999px;
+        font-size: 12px;
+      }
+      .meta {
+        color: var(--muted);
+        font-size: 13px;
+      }
+      .two-col {
+        columns: 2;
+        column-gap: 18px;
+      }
+      .two-col p,
+      .two-col ul {
+        break-inside: avoid;
+      }
+      /* code */
+      pre {
+        background: var(--code);
+        color: var(--code-ink);
+        padding: 14px;
+        border-radius: 12px;
+        overflow: auto;
+        border: 1px solid #1c232c;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 13px;
+        line-height: 1.45;
+      }
+      code {
+        font-family: inherit;
+      }
+      details {
+        background: var(--card);
+        border: 1px solid #1f2732;
+        border-radius: 12px;
+        padding: 12px 14px;
+      }
+      details summary {
+        cursor: pointer;
+        list-style: none;
+        font-weight: 600;
+      }
+      details summary::-webkit-details-marker {
+        display: none;
+      }
+      .note {
+        color: var(--muted);
+        font-size: 14px;
+      }
+      .inline-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+      footer {
+        margin-top: 40px;
+        color: var(--muted);
+        font-size: 13px;
+      }
+      /* print */
+      @media print {
+        header,
+        .btn,
+        .cta {
+          display: none !important;
+        }
+        body {
+          background: #fff;
+          color: #000;
+        }
+        .hero,
+        .card,
+        details {
+          box-shadow: none;
+          border-color: #ccc;
+        }
+        a {
+          color: #0645ad;
+        }
+      }
+      @media (max-width: 880px) {
+        .hero {
+          grid-template-columns: 1fr;
+        }
+        .grid {
+          grid-template-columns: 1fr;
+        }
+        .two-col {
+          columns: 1;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <nav>
+        <div class="brand">
+          <span class="dot"></span><strong>Mark “EnderMage99”</strong>
+          <span class="pill">Game Design & Gameplay Programming</span>
+        </div>
+        <div class="inline-list">
+          <a class="pill" href="#projects">Projects</a>
+          <a class="pill" href="#videos">Videos</a>
+          <a class="pill" href="#code">Code</a>
+          <a class="pill" href="#docs">Design Docs</a>
+          <a class="pill" href="#contact">Contact</a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container">
+      <!-- HERO -->
+      <section class="hero" aria-labelledby="intro">
+        <div>
+          <h1 id="intro">
+            Game Design Portfolio — Systems, AI Behaviors & Readable Combat
+          </h1>
+          <p>
+            I’m a maintainer and contributor on the open‑source
+            <em>Lobotomy Corporation 13</em> community game. I design
+            encounters, implement AI behaviors and combat readability, and build
+            player‑facing systems (crafting, augment UI).
+          </p>
+          <div class="chips">
+            <span class="tag">BYOND DM</span><span class="tag">TGUI</span
+            ><span class="tag">Gameplay Systems</span
+            ><span class="tag">UI/UX</span><span class="tag">Balance</span
+            ><span class="tag">Sprites</span>
+          </div>
+          <div class="cta">
+            <a
+              class="btn"
+              href="https://github.com/EnderMage99"
+              target="_blank"
+              rel="noopener"
+              >GitHub: EnderMage99</a
+            >
+            <a
+              class="btn alt"
+              href="https://wiki.lc13.net/view/Main_Page"
+              target="_blank"
+              rel="noopener"
+              >Project Wiki</a
+            >
+          </div>
+        </div>
+        <div>
+          <div class="card">
+            <h3>Quick facts</h3>
+            <ul class="meta">
+              <li>
+                Focus: readable combat, enemy telegraphs, encounter pacing
+              </li>
+              <li>Systems: crafting/augmentation, server‑side UI validation</li>
+              <li>Art: created/edited combat sprites and effects</li>
+              <li>
+                Collaboration: code reviews, balance passes, documentation
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- PROJECTS -->
+      <section id="projects" aria-labelledby="proj-h">
+        <h2 id="proj-h">Selected projects</h2>
+        <div class="grid">
+          <!-- Project 1 -->
+          <article class="card">
+            <h3>Flame &amp; Metal Fixers — encounter redesign</h3>
+            <p class="meta">
+              Role: AI behavior &amp; balance · Team: community maintainers
+            </p>
+            <p>
+              Implemented a triple‑dash burst, counter windows, and clearer stun
+              feedback to make melee patterns telegraphed and punishable instead
+              of “unfair bursts.”
+            </p>
+            <ul class="meta">
+              <li>
+                <strong>What I owned:</strong> dash/counter procs, timing
+                windows, hit detection polish, SFX hooks
+              </li>
+              <li>
+                <strong>Why it helps design:</strong> teaches spacing and
+                reaction, avoids unreadable damage spikes
+              </li>
+            </ul>
+            <div class="tags">
+              <span class="tag">BYOND DM</span><span class="tag">AI</span
+              ><span class="tag">VFX/SFX</span><span class="tag">Balance</span>
+            </div>
+            <p class="meta">
+              <a
+                href="https://github.com/vlggms/lobotomy-corp13/pull/2002"
+                target="_blank"
+                rel="noopener"
+                >PR #2002 — Flame &amp; Metal Fixers</a
+              >
+            </p>
+          </article>
+
+          <!-- Project 2 -->
+          <article class="card">
+            <h3>Shock Centipede — new boss‑type abnormality</h3>
+            <p class="meta">
+              Role: from prototype to merge · Team: community maintainers
+            </p>
+            <p>
+              Designed a “coil” phase that builds a temporary shield, then
+              discharges a stun/damage AoE if not broken—forcing the player to
+              read the wind‑up and commit to an interrupt.
+            </p>
+            <ul class="meta">
+              <li>
+                <strong>What I owned:</strong> coil/shield logic, AoE discharge,
+                tail‑line telegraph, balance &amp; icons
+              </li>
+              <li>
+                <strong>Design goal:</strong> create a predictable “answer
+                check” that rewards timing
+              </li>
+            </ul>
+            <div class="tags">
+              <span class="tag">BYOND DM</span
+              ><span class="tag">Boss Design</span
+              ><span class="tag">Telegraphs</span>
+            </div>
+            <p class="meta">
+              <a
+                href="https://github.com/vlggms/lobotomy-corp13/pull/1579"
+                target="_blank"
+                rel="noopener"
+                >PR #1579 — Shock Centipede</a
+              >
+            </p>
+          </article>
+
+          <!-- Project 3 -->
+          <article class="card">
+            <h3>Door to Nowhere — abnormality + E.G.O weapon</h3>
+            <p class="meta">
+              Role: implementation &amp; flavor · Team: community maintainers
+            </p>
+            <p>
+              Built the <em>Door to Nowhere</em> abnormality plus a thematic
+              E.G.O melee weapon (<em>Liminal Passage</em>) that has a small
+              on‑hit break chance causing a brief local explosion—risk/reward
+              flavor.
+            </p>
+            <ul class="meta">
+              <li>
+                <strong>What I owned:</strong> abnormality logic, E.G.O weapon
+                behavior, persistence tapes/lore
+              </li>
+              <li>
+                <strong>Design goal:</strong> add memorable flair without
+                overwhelming core loop
+              </li>
+            </ul>
+            <div class="tags">
+              <span class="tag">BYOND DM</span><span class="tag">Weapons</span
+              ><span class="tag">FX</span>
+            </div>
+            <p class="meta">
+              <a
+                href="https://github.com/Lobotomy-Corporation-13/lc13/pull/33"
+                target="_blank"
+                rel="noopener"
+                >PR #33 — Door to Nowhere</a
+              >
+            </p>
+          </article>
+
+          <!-- Project 4 -->
+          <article class="card">
+            <h3>Prosthetics Surgeon — Custom Augments system</h3>
+            <p class="meta">
+              Role: systems &amp; UI (TGUI) · Team: community maintainers
+            </p>
+            <p>
+              Shipped a modular augment‑crafting system with a TGUI interface.
+              Added server‑side validation (form, rank, effect constraints) and
+              live preview icon generation to prevent invalid builds and reduce
+              admin overhead.
+            </p>
+            <ul class="meta">
+              <li>
+                <strong>What I owned:</strong> fabricate flow, validation,
+                preview pipeline, UX copy
+              </li>
+              <li>
+                <strong>Design goal:</strong> empower expression while keeping
+                balance guardrails
+              </li>
+            </ul>
+            <div class="tags">
+              <span class="tag">TGUI</span
+              ><span class="tag">Systems Design</span
+              ><span class="tag">Validation</span>
+            </div>
+            <p class="meta">
+              <a
+                href="https://github.com/Lobotomy-Corporation-13/lc13/pull/14"
+                target="_blank"
+                rel="noopener"
+                >PR #14 — Custom Augments</a
+              >
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <!-- VIDEOS (drop in your links or MP4s) -->
+      <section id="videos" aria-labelledby="vid-h">
+        <h2 id="vid-h">Short videos</h2>
+        <div class="grid">
+          <article class="card">
+            <h3>Flame Fixer — dash &amp; counter telegraph</h3>
+            <p class="meta">
+              30–45s; shows the three‑dash burst, safe windows, and counter
+              bait.
+            </p>
+            <p class="note">
+              Replace with your link:
+              <strong>https://…/flame-dash-demo</strong> or embed an MP4/GIF
+              here.
+            </p>
+          </article>
+          <article class="card">
+            <h3>Shock Centipede — coil, break, discharge</h3>
+            <p class="meta">
+              25–40s; shows shield build → interrupt vs. discharge fail case.
+            </p>
+            <p class="note">
+              Replace with your link:
+              <strong>https://…/centipede-coil-demo</strong>
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <!-- CODE HIGHLIGHTS -->
+      <section id="code" aria-labelledby="code-h">
+        <h2 id="code-h">Code highlights (tiny excerpts)</h2>
+
+        <!-- Highlight 1 -->
+        <details class="card" open>
+          <summary>
+            Flame Fixer — triple‑dash burst (readable pressure window)
+          </summary>
+          <p class="note">
+            What to notice: short burst pattern (3 quick dashes) gated by
+            cooldown, encouraging spacing and timing.
+          </p>
+          <pre><code>// From Flame Fixer behavior (short excerpt)
+ /mob/living/simple_animal/hostile/humanoid/fixer/flame/proc/TripleDash()
+ if (world.time &gt; last_dash + dash_cooldown)
+     Dash(target); Dash(target); Dash(target)</code></pre>
+          <p class="meta">
+            Source PR:
+            <a
+              href="https://github.com/vlggms/lobotomy-corp13/pull/2002"
+              target="_blank"
+              rel="noopener"
+              >#2002</a
+            >
+          </p>
+        </details>
+
+        <!-- Highlight 2 -->
+        <details class="card">
+          <summary>Shock Centipede — coil shield &amp; charge update</summary>
+          <p class="note">
+            What to notice: damage is first absorbed by the temporary shield;
+            any remaining damage fuels charge logic (drives coil/discharge
+            cadence).
+          </p>
+          <pre><code>// From adjustHealth (short excerpt)
+ /mob/living/.../shock_centipede/adjustHealth(amount, updating_health = TRUE, forced = FALSE)
+ if (amount &gt;= 0 &amp;&amp; shield &gt; 0) amount = UpdateShield(amount)
+ if (amount &gt;= 0) UpdateCharge(amount)</code></pre>
+          <p class="meta">
+            Source PR:
+            <a
+              href="https://github.com/vlggms/lobotomy-corp13/pull/1579"
+              target="_blank"
+              rel="noopener"
+              >#1579</a
+            >
+          </p>
+        </details>
+
+        <!-- Highlight 3 -->
+        <details class="card">
+          <summary>Door to Nowhere — “Liminal Passage” risk/reward</summary>
+          <p class="note">
+            What to notice: a small on‑hit break chance that pops a local
+            explosion—adds personality without dominating encounters.
+          </p>
+          <pre><code>// From E.G.O melee weapon (short excerpt)
+ if(prob(break_chance))
+     visible_message(span_danger("[src] suddenly explodes and breaks!"))
+     new /obj/effect/temp_visual/explosion(get_turf(src))</code></pre>
+          <p class="meta">
+            Source PR:
+            <a
+              href="https://github.com/Lobotomy-Corporation-13/lc13/pull/33"
+              target="_blank"
+              rel="noopener"
+              >#33</a
+            >
+          </p>
+        </details>
+
+        <!-- Highlight 4 -->
+        <details class="card">
+          <summary>
+            Custom Augments — fabricate flow &amp; server‑side validation
+          </summary>
+          <p class="note">
+            What to notice: UI action → parse config → validate on server before
+            fabrication (prevents invalid builds).
+          </p>
+          <pre><code>// From TGUI handler (short excerpt)
+ if(action == "fabricate")
+     var/config_json = params["config"]
+     config = json_decode(config_json)
+     var/form_id = config["form"]</code></pre>
+          <p class="meta">
+            Source PR:
+            <a
+              href="https://github.com/Lobotomy-Corporation-13/lc13/pull/14"
+              target="_blank"
+              rel="noopener"
+              >#14</a
+            >
+          </p>
+        </details>
+      </section>
+
+      <!-- DESIGN DOCS -->
+      <section id="docs" aria-labelledby="docs-h">
+        <h2 id="docs-h">Game design documents (briefs)</h2>
+        <div class="grid">
+          <article class="card">
+            <h3>Shock Centipede — encounter brief</h3>
+            <p class="meta">
+              Intent: an “answer‑check” boss with readable coil windows.
+            </p>
+            <ul class="meta">
+              <li>
+                Core loop: build charge → coil shield → discharge if unbroken
+              </li>
+              <li>Player verb: interrupt or create distance before AoE</li>
+              <li>Failure case clarity: visible coil and stun radius</li>
+            </ul>
+            <p class="note">
+              Replace with PDF/GDoc link:
+              <strong>docs/centipede-brief.pdf</strong>
+            </p>
+          </article>
+          <article class="card">
+            <h3>Augment Fabricator — UX notes</h3>
+            <ul class="meta">
+              <li>Constraints surfaced inline (rank caps, effect limits)</li>
+              <li>Live preview icon; server validates before commit</li>
+              <li>Copy keeps failure states actionable</li>
+            </ul>
+            <p class="note">
+              Replace with link: <strong>docs/augment-fabricator-ux.pdf</strong>
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <!-- CONTACT -->
+      <section id="contact" aria-labelledby="ct-h">
+        <h2 id="ct-h">Contact</h2>
+        <p class="meta">
+          Email: <strong>your.email@example.com</strong> · GitHub:
+          <a href="https://github.com/EnderMage99">EnderMage99</a>
+        </p>
+      </section>
+
+      <footer>
+        <p>
+          © <span id="year"></span> Mark “EnderMage99”. Open‑source
+          contributions credited to their respective communities.
+        </p>
+      </footer>
+    </main>
+
+    <script>
+      document.getElementById("year").textContent = new Date().getFullYear();
+    </script>
+  </body>
+</html>
