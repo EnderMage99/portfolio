@@ -254,6 +254,50 @@
         border: 1px solid #1f2732;
         box-shadow: 0 4px 12px var(--shadow);
       }
+      /* Lightbox styles */
+      img {
+        cursor: pointer;
+        transition: opacity 0.2s;
+      }
+      img:hover {
+        opacity: 0.85;
+      }
+      .lightbox {
+        display: none;
+        position: fixed;
+        z-index: 9999;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.9);
+        align-items: center;
+        justify-content: center;
+        cursor: zoom-out;
+      }
+      .lightbox.active {
+        display: flex;
+      }
+      .lightbox img {
+        max-width: 90%;
+        max-height: 90%;
+        border-radius: 8px;
+        box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
+        cursor: default;
+      }
+      .lightbox-close {
+        position: absolute;
+        top: 20px;
+        right: 30px;
+        font-size: 40px;
+        color: #fff;
+        cursor: pointer;
+        font-weight: bold;
+        transition: color 0.2s;
+      }
+      .lightbox-close:hover {
+        color: var(--accent);
+      }
       footer {
         margin-top: 40px;
         color: var(--muted);
@@ -302,6 +346,7 @@
         </div>
         <div class="inline-list">
           <a class="pill" href="#projects">Projects</a>
+          <a class="pill" href="#pixelart">Pixel Art</a>
           <a class="pill" href="#videos">Videos</a>
           <a class="pill" href="#code">Code</a>
           <a class="pill" href="#docs">Design Docs</a>
@@ -593,6 +638,58 @@
             <div style="margin-top: 14px;">
               <iframe width="100%" height="250" src="https://www.youtube.com/embed/ZfFm4RDKuQc" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="border-radius: 8px;"></iframe>
             </div>
+            <div style="margin-top: 14px; display: flex; gap: 10px; flex-wrap: wrap;">
+              <img src="custom_augments_p1.png" alt="Custom Augments UI - Part 1" style="width: calc(33.333% - 7px); border-radius: 8px; border: 1px solid #1f2732;">
+              <img src="custom_augments_p2.png" alt="Custom Augments UI - Part 2" style="width: calc(33.333% - 7px); border-radius: 8px; border: 1px solid #1f2732;">
+              <img src="custom_augments_p3.png" alt="Custom Augments UI - Part 3" style="width: calc(33.333% - 7px); border-radius: 8px; border: 1px solid #1f2732;">
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- PIXEL ART -->
+      <section id="pixelart" aria-labelledby="art-h">
+        <h2 id="art-h">Pixel Art</h2>
+        <div class="grid">
+          <article class="card">
+            <h3>Combat Sprites & Effects</h3>
+            <p class="meta">
+              Original 2D pixel art created for Lobotomy Corporation 13
+            </p>
+            <p>
+              Throughout my work on LC13, I've created numerous sprites for bosses,
+              weapons, effects, and UI elements. These sprites maintain the game's
+              visual style while adding distinctive character to new content.
+            </p>
+            <div style="margin-top: 14px;">
+              <img src="rce_sprites.png" alt="Collection of sprites created for LC13" style="width: 100%; border-radius: 8px; border: 1px solid #1f2732; image-rendering: pixelated;">
+            </div>
+            <div class="tags">
+              <span class="tag">Pixel Art</span>
+              <span class="tag">Animation</span>
+              <span class="tag">VFX</span>
+            </div>
+          </article>
+          <article class="card">
+            <h3>Custom Augments - Code Showcase</h3>
+            <p class="meta">
+              Implementation details of the augment system
+            </p>
+            <p>
+              The backend code for the Custom Augments system handles validation,
+              effect combinations, and server-side security to prevent exploits
+              while maintaining flexibility for creative builds.
+            </p>
+            <div style="margin-top: 14px; display: flex; gap: 10px; flex-wrap: wrap;">
+              <img src="custom_augments_c1.png" alt="Custom Augments Code - Part 1" style="width: calc(33.333% - 7px); border-radius: 8px; border: 1px solid #1f2732;">
+              <img src="custom_augments_c2.png" alt="Custom Augments Code - Part 2" style="width: calc(33.333% - 7px); border-radius: 8px; border: 1px solid #1f2732;">
+              <img src="custom_augments_c3.png" alt="Custom Augments Code - Part 3" style="width: calc(33.333% - 7px); border-radius: 8px; border: 1px solid #1f2732;">
+            </div>
+            <div class="tags">
+              <span class="tag">BYOND DM</span>
+              <span class="tag">TGUI</span>
+              <span class="tag">Systems</span>
+            </div>
           </article>
         </div>
       </section>
@@ -777,8 +874,46 @@
       </footer>
     </main>
 
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox">
+      <span class="lightbox-close" id="lightbox-close">&times;</span>
+      <img id="lightbox-img" src="" alt="">
+    </div>
+
     <script>
       document.getElementById("year").textContent = new Date().getFullYear();
+
+      // Lightbox functionality
+      const lightbox = document.getElementById('lightbox');
+      const lightboxImg = document.getElementById('lightbox-img');
+      const lightboxClose = document.getElementById('lightbox-close');
+
+      // Add click event to all images except those in iframes
+      document.querySelectorAll('img').forEach(img => {
+        img.addEventListener('click', function() {
+          lightbox.classList.add('active');
+          lightboxImg.src = this.src;
+          lightboxImg.alt = this.alt;
+        });
+      });
+
+      // Close lightbox on click
+      lightbox.addEventListener('click', function(e) {
+        if (e.target !== lightboxImg) {
+          lightbox.classList.remove('active');
+        }
+      });
+
+      lightboxClose.addEventListener('click', function() {
+        lightbox.classList.remove('active');
+      });
+
+      // Close on Escape key
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+          lightbox.classList.remove('active');
+        }
+      });
     </script>
   </body>
 </html>
