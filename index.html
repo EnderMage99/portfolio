@@ -347,8 +347,7 @@
         <div class="inline-list">
           <a class="pill" href="#projects">Projects</a>
           <a class="pill" href="#pixelart">Pixel Art</a>
-          <a class="pill" href="#videos">Videos</a>
-          <a class="pill" href="#code">Code</a>
+          <a class="pill" href="#codeshowcase">Code Showcase</a>
           <a class="pill" href="#docs">Design Docs</a>
           <a class="pill" href="#contact">Contact</a>
         </div>
@@ -670,156 +669,99 @@
               <span class="tag">VFX</span>
             </div>
           </article>
-          <article class="card">
-            <h3>Custom Augments - Code Showcase</h3>
+        </div>
+      </section>
+
+      <!-- CODE SHOWCASE -->
+      <section id="codeshowcase" aria-labelledby="showcase-h">
+        <h2 id="showcase-h">Code Showcase</h2>
+        <article class="card">
+            <h3>Damage Resistance Component</h3>
             <p class="meta">
-              Implementation details of the augment system
+              Armor damage calculation with type-specific resistance caps
             </p>
             <p>
-              The backend code for the Custom Augments system handles validation,
-              effect combinations, and server-side security to prevent exploits
-              while maintaining flexibility for creative builds.
+              This component handles damage mitigation through armor, with special logic
+              to cap resistance at 95% and update visual armor ratings based on damage type.
             </p>
-            <div style="margin-top: 14px; display: flex; gap: 10px; flex-wrap: wrap;">
-              <img src="custom_augments_c1.png" alt="Custom Augments Code - Part 1" style="width: calc(33.333% - 7px); border-radius: 8px; border: 1px solid #1f2732;">
-              <img src="custom_augments_c2.png" alt="Custom Augments Code - Part 2" style="width: calc(33.333% - 7px); border-radius: 8px; border: 1px solid #1f2732;">
-              <img src="custom_augments_c3.png" alt="Custom Augments Code - Part 3" style="width: calc(33.333% - 7px); border-radius: 8px; border: 1px solid #1f2732;">
-            </div>
+            <pre><code>/<span style="color: #7bd389;">datum</span>/component/augment/resisting_augment/take_damage_effect<span style="color: #ffd700;">(</span><span style="color: #7bd389;">datum</span>/source, damage, damagetype, def_zone<span style="color: #ffd700;">)</span>
+    . = ..<span style="color: #ffd700;">(</span><span style="color: #ffd700;">)</span>
+    <span style="color: #6c757d;">// Only update armor once per damage event</span>
+    <span style="color: #c586c0;">if</span><span style="color: #ffd700;">(</span>can_update_armor<span style="color: #ffd700;">)</span>
+        can_update_armor = <span style="color: #569cd6;">FALSE</span>
+        <span style="color: #6c757d;">// Get current armor value for this damage type</span>
+        <span style="color: #569cd6;">var</span>/<span style="color: #9cdcfe;">armor</span> = human_parent.getarmor<span style="color: #ffd700;">(</span><span style="color: #569cd6;">null</span>, damagetype<span style="color: #ffd700;">)</span>
+        <span style="color: #6c757d;">// Calculate total resistance from augment effects</span>
+        total_damage_resist = get_total_damage_resist<span style="color: #ffd700;">(</span>source, damage, damagetype, def_zone<span style="color: #ffd700;">)</span>
+
+        <span style="color: #6c757d;">// Cap total resistance at 95% to prevent invulnerability</span>
+        <span style="color: #c586c0;">if</span> <span style="color: #ffd700;">(</span>armor > <span style="color: #b5cea8;">0</span><span style="color: #ffd700;">)</span>
+            <span style="color: #c586c0;">if</span> <span style="color: #ffd700;">(</span>armor > <span style="color: #b5cea8;">95</span><span style="color: #ffd700;">)</span>
+                total_damage_resist = <span style="color: #b5cea8;">0</span>
+            <span style="color: #c586c0;">else if</span><span style="color: #da70d6;">(</span><span style="color: #ffd700;">(</span>total_damage_resist + armor<span style="color: #ffd700;">)</span> > <span style="color: #b5cea8;">95</span><span style="color: #da70d6;">)</span>
+                total_damage_resist = armor - <span style="color: #b5cea8;">95</span>
+
+        <span style="color: #6c757d;">// Apply resistance to armor</span>
+        armor += total_damage_resist
+        <span style="color: #6c757d;">// Update the specific damage type's armor rating</span>
+        <span style="color: #c586c0;">switch</span><span style="color: #ffd700;">(</span>damagetype<span style="color: #ffd700;">)</span>
+            <span style="color: #c586c0;">if</span> <span style="color: #ffd700;">(</span><span style="color: #ce9178;">RED_DAMAGE</span><span style="color: #ffd700;">)</span>
+                human_parent.physiology.armor.setRating<span style="color: #ffd700;">(</span>red=armor<span style="color: #ffd700;">)</span>
+            <span style="color: #c586c0;">if</span> <span style="color: #ffd700;">(</span><span style="color: #ce9178;">WHITE_DAMAGE</span><span style="color: #ffd700;">)</span>
+                human_parent.physiology.armor.setRating<span style="color: #ffd700;">(</span>white=armor<span style="color: #ffd700;">)</span>
+            <span style="color: #c586c0;">if</span> <span style="color: #ffd700;">(</span><span style="color: #ce9178;">BLACK_DAMAGE</span><span style="color: #ffd700;">)</span>
+                human_parent.physiology.armor.setRating<span style="color: #ffd700;">(</span>black=armor<span style="color: #ffd700;">)</span>
+            <span style="color: #c586c0;">if</span> <span style="color: #ffd700;">(</span><span style="color: #ce9178;">PALE_DAMAGE</span><span style="color: #ffd700;">)</span>
+                human_parent.physiology.armor.setRating<span style="color: #ffd700;">(</span>pale=armor<span style="color: #ffd700;">)</span>
+        armor_changed = <span style="color: #569cd6;">TRUE</span>
+        <span style="color: #c586c0;">return</span></code></pre>
             <div class="tags">
               <span class="tag">BYOND DM</span>
-              <span class="tag">TGUI</span>
-              <span class="tag">Systems</span>
+              <span class="tag">Component System</span>
+              <span class="tag">Damage Calculation</span>
             </div>
           </article>
-        </div>
-      </section>
 
-      <!-- VIDEOS (drop in your links or MP4s) -->
-      <section id="videos" aria-labelledby="vid-h">
-        <h2 id="vid-h">Short videos</h2>
-        <div class="grid">
           <article class="card">
-            <h3>Flame Fixer — dash &amp; counter telegraph</h3>
+            <h3>Tremor Defense Augment</h3>
             <p class="meta">
-              30–45s; shows the three‑dash burst, safe windows, and counter
-              bait.
+              Stacking resistance effect with scaling calculation
             </p>
-            <p class="note">
-              Replace with your link:
-              <strong>https://…/flame-dash-demo</strong> or embed an MP4/GIF
-              here.
+            <p>
+              Implements a stacking defense mechanism where resistance scales based on
+              the number of status effect stacks, providing diminishing returns.
             </p>
+            <pre><code><span style="color: #6c757d;">// Tremor Defense - Provides stacking resistance based on tremor status</span>
+/<span style="color: #7bd389;">datum</span>/component/augment/resisting_augment/tremor_defense
+    <span style="color: #6c757d;">// Base resistance per stack (5%)</span>
+    <span style="color: #569cd6;">var</span>/<span style="color: #9cdcfe;">damage_resist</span> = <span style="color: #b5cea8;">0.05</span>
+
+<span style="color: #6c757d;">// Calculate resistance based on tremor stacks</span>
+/<span style="color: #7bd389;">datum</span>/component/augment/resisting_augment/tremor_defense/get_total_damage_resist<span style="color: #ffd700;">(</span><span style="color: #7bd389;">datum</span>/source, damage, damagetype, def_zone<span style="color: #ffd700;">)</span>
+    <span style="color: #6c757d;">// Check if player has tremor status effect</span>
+    <span style="color: #569cd6;">var</span>/<span style="color: #7bd389;">datum</span>/status_effect/stacking/lc_tremor/<span style="color: #9cdcfe;">UT</span> = human_parent.has_status_effect<span style="color: #ffd700;">(</span>/<span style="color: #7bd389;">datum</span>/status_effect/stacking/lc_tremor<span style="color: #ffd700;">)</span>
+    <span style="color: #569cd6;">var</span>/<span style="color: #9cdcfe;">resist</span> = <span style="color: #b5cea8;">0</span>
+    <span style="color: #6c757d;">// Only applies to RED and BLACK damage types</span>
+    <span style="color: #c586c0;">if</span><span style="color: #ffd700;">(</span>UT && <span style="color: #da70d6;">(</span>damagetype == <span style="color: #ce9178;">RED_DAMAGE</span> || damagetype == <span style="color: #ce9178;">BLACK_DAMAGE</span><span style="color: #da70d6;">)</span><span style="color: #ffd700;">)</span>
+        <span style="color: #6c757d;">// Resistance scales with stacks (every 10 stacks = 1 tier)</span>
+        resist = round<span style="color: #ffd700;">(</span>UT.stacks/<span style="color: #b5cea8;">10</span><span style="color: #ffd700;">)</span> * damage_resist * repeat
+    <span style="color: #6c757d;">// Cap resistance with diminishing returns (30% base, +20% per repeat)</span>
+    <span style="color: #c586c0;">if</span><span style="color: #ffd700;">(</span>resist > <span style="color: #da70d6;">(</span><span style="color: #b5cea8;">0.3</span> + <span style="color: #87ceeb;">(</span><span style="color: #b5cea8;">0.2</span> * <span style="color: #ffa500;">(</span>repeat - <span style="color: #b5cea8;">1</span><span style="color: #ffa500;">)</span><span style="color: #87ceeb;">)</span><span style="color: #da70d6;">)</span><span style="color: #ffd700;">)</span>
+        resist = <span style="color: #b5cea8;">0.3</span> + <span style="color: #ffd700;">(</span><span style="color: #b5cea8;">0.2</span> * <span style="color: #da70d6;">(</span>repeat - <span style="color: #b5cea8;">1</span><span style="color: #da70d6;">)</span><span style="color: #ffd700;">)</span>
+
+    <span style="color: #c586c0;">return</span> resist
+
+<span style="color: #6c757d;">// Apply damage reduction and notify player</span>
+/<span style="color: #7bd389;">datum</span>/component/augment/resisting_augment/tremor_defense/take_damage_effect<span style="color: #ffd700;">(</span><span style="color: #7bd389;">datum</span>/source, damage, damagetype, def_zone<span style="color: #ffd700;">)</span>
+    . = ..<span style="color: #ffd700;">(</span><span style="color: #ffd700;">)</span>
+    <span style="color: #6c757d;">// Show damage reduction feedback to player</span>
+    to_chat<span style="color: #ffd700;">(</span>human_parent, span_nicegreen<span style="color: #da70d6;">(</span><span style="color: #ce9178;">"You took [total_damage_resist * 100]% less damage! Due to Tremor Defense"</span><span style="color: #da70d6;">)</span><span style="color: #ffd700;">)</span></code></pre>
+            <div class="tags">
+              <span class="tag">BYOND DM</span>
+              <span class="tag">Status Effects</span>
+              <span class="tag">Scaling Mechanics</span>
+            </div>
           </article>
-          <article class="card">
-            <h3>Shock Centipede — coil, break, discharge</h3>
-            <p class="meta">
-              25–40s; shows shield build → interrupt vs. discharge fail case.
-            </p>
-            <p class="note">
-              Replace with your link:
-              <strong>https://…/centipede-coil-demo</strong>
-            </p>
-          </article>
-        </div>
-      </section>
-
-      <!-- CODE HIGHLIGHTS -->
-      <section id="code" aria-labelledby="code-h">
-        <h2 id="code-h">Code highlights (tiny excerpts)</h2>
-
-        <!-- Highlight 1 -->
-        <details class="card" open>
-          <summary>
-            Flame Fixer — triple‑dash burst (readable pressure window)
-          </summary>
-          <p class="note">
-            What to notice: short burst pattern (3 quick dashes) gated by
-            cooldown, encouraging spacing and timing.
-          </p>
-          <pre><code>// From Flame Fixer behavior (short excerpt)
- /mob/living/simple_animal/hostile/humanoid/fixer/flame/proc/TripleDash()
- if (world.time &gt; last_dash + dash_cooldown)
-     Dash(target); Dash(target); Dash(target)</code></pre>
-          <p class="meta">
-            Source PR:
-            <a
-              href="https://github.com/vlggms/lobotomy-corp13/pull/2002"
-              target="_blank"
-              rel="noopener"
-              >#2002</a
-            >
-          </p>
-        </details>
-
-        <!-- Highlight 2 -->
-        <details class="card">
-          <summary>Shock Centipede — coil shield &amp; charge update</summary>
-          <p class="note">
-            What to notice: damage is first absorbed by the temporary shield;
-            any remaining damage fuels charge logic (drives coil/discharge
-            cadence).
-          </p>
-          <pre><code>// From adjustHealth (short excerpt)
- /mob/living/.../shock_centipede/adjustHealth(amount, updating_health = TRUE, forced = FALSE)
- if (amount &gt;= 0 &amp;&amp; shield &gt; 0) amount = UpdateShield(amount)
- if (amount &gt;= 0) UpdateCharge(amount)</code></pre>
-          <p class="meta">
-            Source PR:
-            <a
-              href="https://github.com/vlggms/lobotomy-corp13/pull/1579"
-              target="_blank"
-              rel="noopener"
-              >#1579</a
-            >
-          </p>
-        </details>
-
-        <!-- Highlight 3 -->
-        <details class="card">
-          <summary>Door to Nowhere — “Liminal Passage” risk/reward</summary>
-          <p class="note">
-            What to notice: a small on‑hit break chance that pops a local
-            explosion—adds personality without dominating encounters.
-          </p>
-          <pre><code>// From E.G.O melee weapon (short excerpt)
- if(prob(break_chance))
-     visible_message(span_danger("[src] suddenly explodes and breaks!"))
-     new /obj/effect/temp_visual/explosion(get_turf(src))</code></pre>
-          <p class="meta">
-            Source PR:
-            <a
-              href="https://github.com/Lobotomy-Corporation-13/lc13/pull/33"
-              target="_blank"
-              rel="noopener"
-              >#33</a
-            >
-          </p>
-        </details>
-
-        <!-- Highlight 4 -->
-        <details class="card">
-          <summary>
-            Custom Augments — fabricate flow &amp; server‑side validation
-          </summary>
-          <p class="note">
-            What to notice: UI action → parse config → validate on server before
-            fabrication (prevents invalid builds).
-          </p>
-          <pre><code>// From TGUI handler (short excerpt)
- if(action == "fabricate")
-     var/config_json = params["config"]
-     config = json_decode(config_json)
-     var/form_id = config["form"]</code></pre>
-          <p class="meta">
-            Source PR:
-            <a
-              href="https://github.com/Lobotomy-Corporation-13/lc13/pull/14"
-              target="_blank"
-              rel="noopener"
-              >#14</a
-            >
-          </p>
-        </details>
       </section>
 
       <!-- DESIGN DOCS -->
@@ -827,31 +769,67 @@
         <h2 id="docs-h">Game design documents (briefs)</h2>
         <div class="grid">
           <article class="card">
-            <h3>Shock Centipede — encounter brief</h3>
+            <h3>Weaponry Grid Crafting System</h3>
             <p class="meta">
-              Intent: an “answer‑check” boss with readable coil windows.
+              Strategic coordinate-based crafting with material movement mechanics
+            </p>
+            <p>
+              A unique crafting system where players navigate a "focus point" through an infinite 2D
+              coordinate grid using weaponry materials. Each material's rarity, damage type, and density
+              determines movement distance and direction, creating a strategic puzzle to reach weapon
+              coordinates and craft city weapons.
             </p>
             <ul class="meta">
               <li>
-                Core loop: build charge → coil shield → discharge if unbroken
+                <strong>Core loop:</strong> use materials → move focus point → reach weapon radius → craft weapon
               </li>
-              <li>Player verb: interrupt or create distance before AoE</li>
-              <li>Failure case clarity: visible coil and stun radius</li>
+              <li>Material properties determine movement patterns (RED: cardinal, WHITE: diagonal, PALE: teleport)</li>
+              <li>Includes weaponry disassembler to convert existing weapons into navigation shards</li>
             </ul>
-            <p class="note">
-              Replace with PDF/GDoc link:
-              <strong>docs/centipede-brief.pdf</strong>
+            <div class="tags">
+              <span class="tag">Crafting System</span>
+              <span class="tag">Resource Management</span>
+              <span class="tag">Grid Navigation</span>
+            </div>
+            <p class="meta" style="margin-top: 10px;">
+              <a
+                href="https://docs.google.com/document/d/14J5MQtU4mg6DL8xl6ePX9LRrQmGXZD8EtiAAi8COXjA/edit?usp=sharing"
+                target="_blank"
+                rel="noopener"
+                >View Design Document →</a
+              >
             </p>
           </article>
           <article class="card">
-            <h3>Augment Fabricator — UX notes</h3>
+            <h3>Prosthetics Surgeon Expansion</h3>
+            <p class="meta">
+              Role progression system with customizable augments and attachments
+            </p>
+            <p>
+              Addresses the Prosthetics Surgeon being the least complex City Mode role by introducing
+              two new fabrication systems: the Augment Fabricator (custom player augments with templates,
+              effects, and progression) and the Attachment Fabricator (weapon modifications with status
+              effects and synergies).
+            </p>
             <ul class="meta">
-              <li>Constraints surfaced inline (rank caps, effect limits)</li>
-              <li>Live preview icon; server validates before commit</li>
-              <li>Copy keeps failure states actionable</li>
+              <li>
+                <strong>Design goal:</strong> create repeat customer value through customization and progression
+              </li>
+              <li>EP point budget system with positive/negative effects for build variety</li>
+              <li>Dynamic market with sales/markups every 20 minutes to encourage strategic timing</li>
             </ul>
-            <p class="note">
-              Replace with link: <strong>docs/augment-fabricator-ux.pdf</strong>
+            <div class="tags">
+              <span class="tag">Systems Design</span>
+              <span class="tag">Progression</span>
+              <span class="tag">Customization</span>
+            </div>
+            <p class="meta" style="margin-top: 10px;">
+              <a
+                href="https://docs.google.com/document/d/1r434lx5XZ11bnW1-r5tADwjAzEd8kZ05j0n7ISB6xmc/edit?usp=sharing"
+                target="_blank"
+                rel="noopener"
+                >View Design Document →</a
+              >
             </p>
           </article>
         </div>
