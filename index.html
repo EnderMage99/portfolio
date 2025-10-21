@@ -286,6 +286,18 @@
       details summary::-webkit-details-marker {
         display: none;
       }
+      #projects details summary {
+        color: #41ff8d;
+        animation: flicker-green 2s ease-in-out infinite;
+      }
+      @keyframes flicker-green {
+        0%, 100% {
+          color: #41ff8d;
+        }
+        50% {
+          color: #2d8a5c;
+        }
+      }
       .note {
         color: var(--muted);
         font-size: 14px;
