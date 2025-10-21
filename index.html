@@ -28,6 +28,20 @@
         --radius: 14px;
         --pad: 18px;
       }
+      [data-theme="light"] {
+        --bg: #f5f7fa;
+        --card: #ffffff;
+        --ink: #1a1d23;
+        --muted: #5a6270;
+        --accent: #4caf50;
+        --accent-2: #2196f3;
+        --shadow: rgba(0, 0, 0, 0.1);
+        --code: #f6f8fa;
+        --code-ink: #24292e;
+        --chip: #e8eaed;
+        --link: #1976d2;
+        --good: #4caf50;
+      }
       * {
         box-sizing: border-box;
       }
@@ -46,6 +60,14 @@
           #0b0d10 60%
         );
         background-attachment: fixed;
+        transition: background 0.3s ease, color 0.3s ease;
+      }
+      [data-theme="light"] body {
+        background: radial-gradient(
+          1200px 800px at 80% -10%,
+          #e3e8ef 0%,
+          #f5f7fa 60%
+        );
       }
       a {
         color: var(--link);
@@ -65,6 +87,14 @@
           rgba(11, 13, 16, 0.55)
         );
         border-bottom: 1px solid #1c242f;
+      }
+      [data-theme="light"] header {
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.85),
+          rgba(255, 255, 255, 0.55)
+        );
+        border-bottom: 1px solid #d0d5dd;
       }
       nav {
         max-width: var(--maxw);
@@ -98,6 +128,9 @@
         font-size: 12px;
         border: 1px solid #1f2833;
       }
+      [data-theme="light"] .pill {
+        border: 1px solid #c0c5ce;
+      }
       .container {
         max-width: var(--maxw);
         margin: 0 auto;
@@ -113,6 +146,10 @@
         border: 1px solid #1f2732;
         border-radius: var(--radius);
         box-shadow: 0 10px 40px var(--shadow);
+      }
+      [data-theme="light"] .hero {
+        background: linear-gradient(180deg, #ffffff, #f8f9fa);
+        border: 1px solid #d0d5dd;
       }
       .hero h1 {
         font-size: 34px;
@@ -144,10 +181,17 @@
         font-weight: 600;
         border: 1px solid #5fcf78;
       }
+      [data-theme="light"] .btn {
+        color: #ffffff;
+        border: 1px solid #45a049;
+      }
       .btn.alt {
         background: transparent;
         color: var(--ink);
         border-color: #2a3543;
+      }
+      [data-theme="light"] .btn.alt {
+        border-color: #c0c5ce;
       }
       section {
         margin-top: 36px;
@@ -168,6 +212,9 @@
         padding: 18px;
         box-shadow: 0 6px 28px var(--shadow);
       }
+      [data-theme="light"] .card {
+        border: 1px solid #d0d5dd;
+      }
       .card h3 {
         margin: 0 0 6px;
         font-size: 18px;
@@ -185,6 +232,9 @@
         padding: 4px 8px;
         border-radius: 999px;
         font-size: 12px;
+      }
+      [data-theme="light"] .tag {
+        border: 1px solid #c0c5ce;
       }
       .meta {
         color: var(--muted);
@@ -213,6 +263,9 @@
         font-size: 13px;
         line-height: 1.45;
       }
+      [data-theme="light"] pre {
+        border: 1px solid #d0d5dd;
+      }
       code {
         font-family: inherit;
       }
@@ -221,6 +274,9 @@
         border: 1px solid #1f2732;
         border-radius: 12px;
         padding: 12px 14px;
+      }
+      [data-theme="light"] details {
+        border: 1px solid #d0d5dd;
       }
       details summary {
         cursor: pointer;
@@ -350,6 +406,9 @@
           <a class="pill" href="#codeshowcase">Code Showcase</a>
           <a class="pill" href="#docs">Design Docs</a>
           <a class="pill" href="#contact">Contact</a>
+          <button class="pill" id="theme-toggle" style="cursor: pointer; border: none; background: var(--chip); color: var(--muted);">
+            <span id="theme-icon">☀️</span>
+          </button>
         </div>
       </nav>
     </header>
@@ -880,6 +939,34 @@
 
     <script>
       document.getElementById("year").textContent = new Date().getFullYear();
+
+      // Theme toggle functionality
+      const themeToggle = document.getElementById('theme-toggle');
+      const themeIcon = document.getElementById('theme-icon');
+      const htmlElement = document.documentElement;
+
+      // Check for saved theme preference or default to dark
+      const savedTheme = localStorage.getItem('theme') || 'dark';
+      if (savedTheme === 'light') {
+        htmlElement.setAttribute('data-theme', 'light');
+        themeIcon.textContent = '🌙';
+      }
+
+      // Toggle theme on button click
+      themeToggle.addEventListener('click', () => {
+        const currentTheme = htmlElement.getAttribute('data-theme');
+        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+
+        if (newTheme === 'light') {
+          htmlElement.setAttribute('data-theme', 'light');
+          themeIcon.textContent = '🌙';
+          localStorage.setItem('theme', 'light');
+        } else {
+          htmlElement.removeAttribute('data-theme');
+          themeIcon.textContent = '☀️';
+          localStorage.setItem('theme', 'dark');
+        }
+      });
 
       // Lightbox functionality
       const lightbox = document.getElementById('lightbox');
